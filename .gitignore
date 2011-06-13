@@ -1,0 +1,13 @@
+log/*.log
+.DS_Store
+.project
+**/.DS_Store
+*.BACKUP.*
+*.BASE.*
+*.REMOTE.*
+*.ORIG.*
+*.LOCAL.*
+*.orig
+README.md
+dump.rdb
+package.json
