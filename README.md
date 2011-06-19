@@ -54,8 +54,8 @@ How to scale? Just launch more hornet instances and load balance them though a T
 
 Include theses two libraries :
 
-  <script src="http://host:port/socket.io/socket.io.js"></script>
-  <script src="http://host:port/hornet/hornet.js"></script>
+    <script src="http://host:port/socket.io/socket.io.js"></script>
+    <script src="http://host:port/hornet/hornet.js"></script>
 
 Note that Hornet is running on port 8187 by default. If you want to expose Hornet on port 80 on your domain, use a TCP load balancer, like HAProxy
 
@@ -64,25 +64,25 @@ Note that Hornet is running on port 8187 by default. If you want to expose Horne
 
 Token should be generated for a specific channel using a connector. See the dedicated section below.
 
-  // javascript
-  var hornet = new Hornet(url, port, channel, token);
-  hornet.connect();    
+    // javascript
+    var hornet = new Hornet(url, port, channel, token);
+    hornet.connect();    
 
 Example :
 
-  // javascript
-  var hornet = new Hornet("localhost", "80", "new_auctions", "843eaERd3");
-  hornet.connect();    
+    // javascript
+    var hornet = new Hornet("localhost", "80", "new_auctions", "843eaERd3");
+    hornet.connect();    
 
 
 ## Messages handling
 
 Each time a new message is coming, an event is raised. Simply handle them like the following:
 
-  // javascript
-  hornet.on("message_type", function ( messageData ) {
-    // your own code here
-  });
+    // javascript
+    hornet.on("message_type", function ( messageData ) {
+       // your own code here
+    });
 
 
 ### Excluding clients from a message broadcast
