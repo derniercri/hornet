@@ -1,0 +1,37 @@
+  {
+  "name" : "hornet",
+  "description" : "Realtime engine for pub/sub in web applications. Backed by Socket.io, redis.",
+  "version" : "0.1.0",
+  "author" : "Nectify",
+  "repository" : {
+    "type" : "git", 
+    "url" : "git@github.com:nectify/hornet.git"
+  },
+  "bugs" : { 
+    "web" : "http://github.com/nectify/hornet/issues"
+  },
+  "os" : [ "linux", "osx" ],
+  "directories" : { 
+    "bin" : "./bin",
+    "lib" : "./lib",
+    "public" : "./public"
+  }, 
+  "main" : "hornet",
+  "engines" : { 
+    "node" : "v0.4.0", 
+  },
+  "bin" : { 
+    "hornet" : "./hornet.js" 
+  },
+  "dependencies" : { 
+    "socket.io" : "*", 
+    "redis" : "*" , 
+    "winston" : "*" 
+  },
+  "licenses" : [
+    { 
+      "type" : "Apache License, Version 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0"
+    }   
+  ]
+}
