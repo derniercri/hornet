@@ -8,6 +8,4 @@ log/*.log
 *.ORIG.*
 *.LOCAL.*
 *.orig
-README.md
 dump.rdb
-package.json
