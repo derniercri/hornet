@@ -44,7 +44,7 @@ First, be sure that redis server is already launched
 
 Then launch hornet:
   
-	node hornet
+	hornet
 
 How to scale? Just launch more hornet instances and load balance them though a TCP load balancer.
 
