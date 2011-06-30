@@ -22,8 +22,8 @@
     "hornet" : "./bin/hornet" 
   },
   "dependencies" : { 
-    "socket.io" : "*", 
-    "redis" : "*" , 
+    "socket.io" : "0.6.x", 
+    "redis" : "2.2.x" , 
     "winston" : "*" 
   },
   "licenses" : [
