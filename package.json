@@ -1,11 +1,28 @@
 {
   "name" : "hornet",
-  "description" : "Realtime engine for pub/sub in web applications. Backed by Socket.io, redis.",
-  "version" : "0.1.5",
+  "description" : "Realtime engine for secured pub/sub in web applications. Backed by Socket.io, redis.",
+  "version" : "0.2.0",
   "repository" : {
     "type" : "git", 
     "url" : "git@github.com:nectify/hornet.git"
   },
+  "contributors" : [
+    {
+      "name" : "Robin Komiwes",
+      "email": "robin.komiwes@gmail.com",
+      "url" : "http://twitter.com/robinkomiwes" 
+    },
+    {
+      "name" : "Maxime Brazeilles",
+      "email": "maxime.brazeilles@gmail.com",
+      "url" : "" 
+    },
+	  {
+     "name" : "Tristan Bourgois",
+     "email": "tristan.bourgois@gmail.com",
+     "url" : "" 
+   }
+	],
   "bugs" : { 
     "web" : "http://github.com/nectify/hornet/issues"
   },
@@ -22,9 +39,9 @@
     "hornet" : "./bin/hornet" 
   },
   "dependencies" : { 
-    "socket.io" : "0.6.x", 
-    "redis" : "2.2.x" , 
-    "winston" : "*" 
+    "socket.io" : "0.7.x", 
+    "redis" : "0.6.x" , 
+    "winston" : "0.3.x" 
   },
   "licenses" : [
     { 
