@@ -34,7 +34,7 @@ Hornet messages should always be JSON valid objects, containing at least the "ty
 
 ## Installation
 
-	npm install hornet
+	npm install hornet -g
 
 ## Starting a hornet instance
 
