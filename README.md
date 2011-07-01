@@ -65,13 +65,13 @@ Note that Hornet is running on port 8187 by default. If you want to expose Horne
 Token should be generated for a specific channel using a connector. See the dedicated section below.
 
     // javascript
-    var hornet = new Hornet(url, port, channel, token);
+    var hornet = new Hornet(uri , channel, token);
     hornet.connect();    
 
 Example :
 
     // javascript
-    var hornet = new Hornet("localhost", "80", "new_auctions", "843eaERd3");
+    var hornet = new Hornet("http://localhost:8187", "new_auctions", "843eaERd3");
     hornet.connect();    
 
 
