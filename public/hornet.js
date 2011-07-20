@@ -14,6 +14,8 @@ Hornet.prototype = {
     
     handlers[type].push( callback );
   },
+  //Connection status 
+  connected : false,
 
   removeHandler : function(type, callback) {
     var handlers = this.handlers;
@@ -42,7 +44,10 @@ Hornet.prototype = {
     var socket = this.socket;
     var that = this;
 
+
     socket.on('connect', function(){
+      that.connected = true;
+
       socket.on('message', function( rawMessage ) {
         var message = JSON.parse( rawMessage );
 
@@ -65,6 +70,7 @@ Hornet.prototype = {
     
 
     socket.on('disconnect', function(){ 
+     	that.connected = false;
     });
 
     socket.send(JSON.stringify({token: this.token, channel: this.channel}));
