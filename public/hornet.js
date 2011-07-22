@@ -1,3 +1,47 @@
+var delayedTimeout = function( callback, initialTime, maxTime ) {
+  this.currentTime = initialTime;
+  this.callback = callback;
+  this.maxTime = 0 || maxTime;
+
+  this.nextTick();
+}
+
+delayedTimeout.prototype = {
+  stop : function () {
+    clearTimeout(this.timeout);
+  },
+
+  nextTick : function() {
+
+    if ( ! this.previousTime )
+      this.previousTime = 0;
+
+    var newTime = this.previousTime + this.currentTime;
+
+    this.previousTime = this.currentTime;
+    this.currentTime = newTime;
+
+    if ( newTime > this.maxTime )
+      newTime = this.maxTime;
+
+    var that = this;
+    this.timeout = setTimeout(function() { that.onTimeout( that ) } , newTime);
+  },
+
+  onTimeout : function( ctx ) {
+    var that = this;
+
+    if ( ctx )
+      that = ctx;
+    
+    that.nextTick();
+    
+    that.callback(that);
+
+    
+  }
+}
+
 var Hornet = function (uri, channel, token){
   this.uri = uri;
   this.token = token;
@@ -20,7 +64,7 @@ Hornet.prototype = {
   removeHandler : function(type, callback) {
     var handlers = this.handlers;
 
-    if ( handlers[type] == undefined)
+    if ( handlers[type] == undefined )
       return; // do nothing...
 
     for ( i in handlers[type] ) {
@@ -46,9 +90,14 @@ Hornet.prototype = {
 
 
     socket.on('connect', function(){
+    
       that.connected = true;
+      
+      socket.send(JSON.stringify({token: that.token, channel: that.channel}));
 
-      socket.on('message', function( rawMessage ) {
+    });
+    
+    socket.on('message', function( rawMessage ) {
         var message = JSON.parse( rawMessage );
 
         if ( ! message.type )
@@ -66,13 +115,27 @@ Hornet.prototype = {
           handler( message );
         }
       });
+
+    socket.on('disconnect', function(){
+      var handlers = that.handlers;
+      that.connected = false;
+      
+      if ( handlers['disconnect'] != undefined )
+      {
+        for ( i in handlers['disconnect'] ) {
+          var handler = handlers['disconnect'][i];
+          handler();
+        }
+      }
+      
+      var reconnect = new delayedTimeout( function(self){
+        if( ! that.connected )
+          that.socket.socket.connect();
+        else
+          self.stop();
+      }, 5000, 30000);
     });
+
     
-
-    socket.on('disconnect', function(){ 
-     	that.connected = false;
-    });
-
-    socket.send(JSON.stringify({token: this.token, channel: this.channel}));
   }
 }
