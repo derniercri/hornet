@@ -54,8 +54,8 @@ How to scale? Just launch more hornet instances and load balance them though a T
 
 Include theses two libraries :
 
-    <script src="http://host:port/socket.io/socket.io.js"></script>
-    <script src="http://host:port/hornet/hornet.js"></script>
+	<script src="http://host:port/socket.io/socket.io.js"></script>
+	<script src="http://host:port/hornet/hornet.js"></script>
 
 Note that Hornet is running on port 8187 by default. If you want to expose Hornet on port 80 on your domain, use a TCP load balancer, like HAProxy
 
@@ -64,25 +64,25 @@ Note that Hornet is running on port 8187 by default. If you want to expose Horne
 
 Token should be generated for a specific channel using a connector. See the dedicated section below.
 
-    // javascript
-    var hornet = new Hornet(uri , channel, token);
-    hornet.connect();    
+	// javascript
+	var hornet = new Hornet(uri , channel, token);
+	hornet.connect();    
 
 Example :
 
-    // javascript
-    var hornet = new Hornet("http://localhost:8187", "new_auctions", "843eaERd3");
-    hornet.connect();    
+	// javascript
+	var hornet = new Hornet("http://localhost:8187", "new_auctions", "843eaERd3");
+	hornet.connect();    
 
 
 ## Messages handling
 
 Each time a new message is coming, an event is raised. Simply handle them like the following:
 
-    // javascript
-    hornet.on("message_type", function ( messageData ) {
-       // your own code here
-    });
+	// javascript
+	hornet.on("message_type", function ( messageData ) {
+	   // your own code here
+	});
 
 
 ### Excluding clients from a message broadcast
@@ -114,32 +114,32 @@ Each connector should expose the following described methods, adapted to impleme
 
 #### constructor
 
-    initializer of the connector. Should be parametrized with Redis connection settings.
+	initializer of the connector. Should be parametrized with Redis connection settings.
 
 #### create access token
 
-    param string : channel : name of the channel associated to the access token
-    return string : the access token
+	param string : channel : name of the channel associated to the access token
+	return string : the access token
 
 #### disconnect tokens
 
-    param string list : tokens : list of tokens to permanently disconnect from any hornet instance
+	param string list : tokens : list of tokens to permanently disconnect from any hornet instance
 
 #### publish
 
-    param string : channel : name of the channel to publish
-    param string : type : type of the message that is going to be published
-    param string : message : JSON object containing all the message data to be broadcasted
-    param string list : options : pair of key/value of options that will be merged with @message.
-    return number : the result of the redis.publish event
+	param string : channel : name of the channel to publish
+	param string : type : type of the message that is going to be published
+	param string : message : JSON object containing all the message data to be broadcasted
+	param string list : options : pair of key/value of options that will be merged with @message.
+	return number : the result of the redis.publish event
 
 #### redis
 
-    return redis client instance : the redis client instance used by the connector
+	return redis client instance : the redis client instance used by the connector
 
 #### TTL
 
-    property : the value of time to live for access token. Should be 120 seconds as default ( 2 minuts ) 
+	property : the value of time to live for access token. Should be 120 seconds as default ( 2 minuts ) 
 
 ### List of existing connectors
 
