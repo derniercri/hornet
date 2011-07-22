@@ -99,10 +99,12 @@ Example:
 ### Reconnect when loosing the connection
 
 Socket.io has an built-in system for reconnection, but Hornet has it own too. It allow you to ask for a new token to initialize a new connection. You just have to define the "disconnect" event with this :
+
 	//javascript
 	hornet.on("disconnect", function ( ) {
-	  //Ajax calling to get a new token ?
+		//Ajax calling to get a new token ?
 	};
+
 After that, the client will try to open a new connection to Hornet with the new token. Note that, it let some time between two attempts and it increase over the time to a maximum of 30 seconds.
 
 ## Hornet connectors 
