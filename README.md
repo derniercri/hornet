@@ -81,9 +81,8 @@ Each time a new message is coming, an event is raised. Simply handle them like t
 
 	// javascript
 	hornet.on("message_type", function ( messageData ) {
-	   // your own code here
+		// your own code here
 	});
-
 
 ### Excluding clients from a message broadcast
 
