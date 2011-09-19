@@ -9,3 +9,4 @@ log/*.log
 *.LOCAL.*
 *.orig
 dump.rdb
+node_modules/
