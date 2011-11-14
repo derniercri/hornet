@@ -50,37 +50,53 @@ var Hornet = function (uri, channel, token){
 }
 
 Hornet.prototype = {
-  addHandler : function(type, callback) {
+  addHandler : function(channel, type, callback) {
     var handlers = this.handlers;
 
-    if ( handlers[type] == undefined )
-      handlers[type] = [];
+    if ( handlers[channel] == undefined )
+      handlers[channel] = {};
+    if ( handlers[channel][type] == undefined )
+      handlers[channel][type] = [];
     
-    handlers[type].push( callback );
+    handlers[channel][type].push( callback );
   },
   //Connection status 
   connected : false,
 
-  removeHandler : function(type, callback) {
+  removeHandler : function(channel, type, callback) {
     var handlers = this.handlers;
 
-    if ( handlers[type] == undefined )
+    if ( handlers[channel] == undefined  && handlers[channel][type] )
       return; // do nothing...
 
-    for ( i in handlers[type] ) {
-      var handler = handlers[type][i];
+    for ( i in handlers[channel][type] ) {
+      var handler = handlers[channel][type][i];
 
-      if ( handler == callback )
-        handlers[type].splice(i, 1);
+      if ( handler == callback ) {
+        handlers[channel][type].splice(i, 1);
+        break;
+      }
     }
   },
 
-  on : function(type, callback) {
-    this.addHandler(type,callback);
+  on : function(channel, type, callback) {
+    if ( typeof channel == 'object') {
+      for ( var i in channel ) {
+        this.addHandler(channel[i], type, callback);
+      }
+    } else {
+      this.addHandler(channel, type, callback);
+    }
   },
 
-  un : function(type, callback){
-    this.removeHandler(type,callback);
+  un : function(channel, type, callback){
+    if ( typeof channel == 'object') {
+      for ( var i in channel ) {
+        this.removeHandler(channel, type, callback);
+      }
+    } else {
+      this.removeHandler(channel, type, callback);
+    }
   },
 
   connect : function () {
@@ -100,17 +116,18 @@ Hornet.prototype = {
     socket.on('message', function( rawMessage ) {
         var message = JSON.parse( rawMessage );
 
-        if ( ! message.type )
+        if ( ! message.type && ! message.channel )
           return;
 
         var type = message.type;
+        var channel = message.chanel;
         var handlers = that.handlers;
 
-        if ( handlers[type] == undefined )
+        if ( handlers[channel][type] == undefined )
           return;
 
-        for ( i in handlers[type] ) {
-          var handler = handlers[type][i];
+        for ( i in handlers[channel][type] ) {
+          var handler = handlers[channel][type][i];
 
           handler( message );
         }
