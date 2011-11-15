@@ -80,7 +80,7 @@ Note: this synthax doesn't support multichannel.
 Example :
 
 	// javascript
-	var hornet = new Hornet({ uri: 'http://localhost:8187', channels: ['news', 'privateMessage'], token: 'VhjHU89Jhk' });
+	var hornet = new Hornet({ uri: 'http://localhost:8187', channels: ['news', 'privateMessages'], token: 'VhjHU89Jhk' });
 	hornet.connect();    
 
 
