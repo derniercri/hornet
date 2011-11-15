@@ -24,6 +24,7 @@ Hornet messages should always be JSON valid objects, containing at least the "ty
 * Secure subscription to channels, using temporary, non-consecutive 9-chars base 62 numbers.
 * Specified architecture for connectors, and connectors available in multiples languages: Java and Ruby at the moment
 * Lots of supported transports and browsers thanks to [Socket.io](http://socket.io/)
+* Multichannel supports, you can now connect to multiple channel
 
 
 ## Requirements
@@ -60,18 +61,26 @@ Include theses two libraries :
 Note that Hornet is running on port 8187 by default. If you want to expose Hornet on port 80 on your domain, use a TCP load balancer, like HAProxy
 
 
-### Instanciate the connection
+### Instantiate the connection
 
 Token should be generated for a specific channel using a connector. See the dedicated section below.
 
 	// javascript
-	var hornet = new Hornet(uri , channel, token);
-	hornet.connect();    
+	var hornet = new Hornet({ uri: 'uri', channels: ['channel1', 'channel2'], token: 'token' });
+	hornet.connect();
+
+You can always use the old synthax but it's deprecated now :
+
+	// javascript
+	var hornet = new Hornet(uri, channel, token);
+	hornet.connect();
+
+Note: this synthax doesn't support multichannel.
 
 Example :
 
 	// javascript
-	var hornet = new Hornet("http://localhost:8187", "new_auctions", "843eaERd3");
+	var hornet = new Hornet({ uri: 'http://localhost:8187', channels: ['news', 'privateMessage'], token: 'VhjHU89Jhk' });
 	hornet.connect();    
 
 
@@ -80,7 +89,14 @@ Example :
 Each time a new message is coming, an event is raised. Simply handle them like the following:
 
 	// javascript
-	hornet.on("message_type", function ( messageData ) {
+	hornet.on("channel","message_type", function ( messageData ) {
+		// your own code here
+	});
+
+Note that you can handle the same type on multiple channel like the following:
+
+	// javascript
+	hornet.on(["channel", "channel2"], "message_type", function ( messageData ) {
 		// your own code here
 	});
 
@@ -96,12 +112,33 @@ Example:
 	Client with token "a3RErg5Z" sends "{ type: "foo", except: "a3RErg5Z", text: "dummy" }"
 	Hornet is notified of the new message, broadcasts it to clients with tokens : "2dlk5ELM" and "EKR39Ehg"
 
+## Hornet channel
+This channel is only used for handling intern events like disconnect or error.
+
+### Handling error 
+
+Hornet can throw some event through the socket, like an invalid token. Use the following to handle that case :
+
+	//javascript
+	hornet.on("hornet", "error", function (reply) {
+		// Something went wrong
+	};
+
+	//javascript
+	//Exemple of a reply :
+	{ 
+    type: "error",
+    channel: "hornet",
+    error: "INVALID_TOKEN", 
+    errorMsg : "Invalid token used, please get a new token" 
+  };
+
 ### Reconnect when loosing the connection
 
 Socket.io has an built-in system for reconnection, but Hornet has it own too. It allow you to ask for a new token to initialize a new connection. You just have to define the "disconnect" event with this :
 
 	//javascript
-	hornet.on("disconnect", function ( ) {
+	hornet.on("hornet", disconnect", function ( ) {
 		//Ajax calling to get a new token ?
 	};
 

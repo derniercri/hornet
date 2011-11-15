@@ -43,10 +43,20 @@ delayedTimeout.prototype = {
 }
 
 var Hornet = function (uri, channels, token){
-  this.uri = uri;
-  this.token = token;
-  this.channels = channels;
-  this.handlers = [];
+  if ( arguments.length == 1 && typeof arguments[0] == 'object' ) {
+    var opts = arguments[0];
+
+    this.uri = opts['uri'];
+    this.channels = opts['channels'] ? opts['channels'] : [ opts['channel'] ];
+    this.token = opts['token'];
+  } else {
+    // DEPRECATED
+    this.uri = arguments[0];
+    this.channels = arguments[1];
+    this.token = arguments[2];
+  }
+
+  this.handlers = {};
 }
 
 Hornet.prototype = {
@@ -137,10 +147,10 @@ Hornet.prototype = {
       var handlers = that.handlers;
       that.connected = false;
       
-      if ( handlers['disconnect'] != undefined )
+      if ( handlers['hornet']['disconnect'] != undefined )
       {
-        for ( i in handlers['disconnect'] ) {
-          var handler = handlers['disconnect'][i];
+        for ( i in handlers['hornet']['disconnect'] ) {
+          var handler = handlers['hornet']['disconnect'][i];
           handler();
         }
       }
