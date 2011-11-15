@@ -42,10 +42,10 @@ delayedTimeout.prototype = {
   }
 }
 
-var Hornet = function (uri, channel, token){
+var Hornet = function (uri, channels, token){
   this.uri = uri;
   this.token = token;
-  this.channel = channel;
+  this.channels = channels;
   this.handlers = [];
 }
 
@@ -109,29 +109,29 @@ Hornet.prototype = {
     
       that.connected = true;
       
-      socket.send(JSON.stringify({token: that.token, channel: that.channel}));
+      socket.send(JSON.stringify({token: that.token, channels: that.channels}));
 
     });
     
     socket.on('message', function( rawMessage ) {
-        var message = JSON.parse( rawMessage );
+      var message = JSON.parse( rawMessage );
 
-        if ( ! message.type && ! message.channel )
-          return;
+      if ( ! message.type && ! message.channel )
+        return;
 
-        var type = message.type;
-        var channel = message.chanel;
-        var handlers = that.handlers;
+      var type = message.type;
+      var channel = message.channel;
+      var handlers = that.handlers;
 
-        if ( handlers[channel][type] == undefined )
-          return;
+      if ( handlers[channel] == undefined || handlers[channel][type] == undefined )
+        return;
 
-        for ( i in handlers[channel][type] ) {
-          var handler = handlers[channel][type][i];
+      for ( i in handlers[channel][type] ) {
+        var handler = handlers[channel][type][i];
 
-          handler( message );
-        }
-      });
+        handler( message );
+      }
+    });
 
     socket.on('disconnect', function(){
       var handlers = that.handlers;
