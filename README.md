@@ -63,7 +63,7 @@ Note that Hornet is running on port 8187 by default. If you want to expose Horne
 
 ### Instantiate the connection
 
-Token should be generated for a specific channel using a connector. See the dedicated section below.
+Token should be generated for one or multiple channels using a connector. See the dedicated section below.
 
 	// javascript
 	var hornet = new Hornet({ uri: 'uri', channels: ['channel1', 'channel2'], token: 'token' });
@@ -93,7 +93,7 @@ Each time a new message is coming, an event is raised. Simply handle them like t
 		// your own code here
 	});
 
-Note that you can handle the same type on multiple channel like the following:
+Note that you can handle the same type on multiple channels like the following:
 
 	// javascript
 	hornet.on(["channel", "channel2"], "message_type", function ( messageData ) {
@@ -127,11 +127,11 @@ Hornet can throw some event through the socket, like an invalid token. Use the f
 	//javascript
 	//Exemple of a reply :
 	{ 
-    type: "error",
-    channel: "hornet",
-    error: "INVALID_TOKEN", 
-    errorMsg : "Invalid token used, please get a new token" 
-  };
+	  type: "error",
+	  channel: "hornet",
+	  error: "INVALID_TOKEN", 
+	  errorMsg : "Invalid token used, please get a new token" 
+	};
 
 ### Reconnect when loosing the connection
 
