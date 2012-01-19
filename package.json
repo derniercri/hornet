@@ -40,7 +40,7 @@
   },
   "main": "index",
   "dependencies" : { 
-    "socket.io" : "0.8.4", 
+    "socket.io" : "0.8.7", 
     "redis" : "0.6.x" , 
     "winston" : "0.3.x",
     "pkginfo": "0.2.x"
