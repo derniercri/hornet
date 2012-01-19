@@ -4,21 +4,19 @@
  * Apache 2.0 Licensed
  */
 
- var consts = require('consts')
+ var consts = require('../lib/consts')
   , http = require('http')
   , should = require('./common');
 
-require('hornet_request');
-
+require('../lib/hornet_request');
 
 
 /**
  * Test.
  */
 
-module.exports = {
-
-  'test hornet request correctly wraps request and response': function (done) {
+describe('Hornet Request', function() {
+  it('should correctly wraps request and response', function (done) {
     var serve = function( request, response ) {
       var hornetRequest = new HornetRequest( request, response );
 
@@ -38,9 +36,9 @@ module.exports = {
       httpServer.close();
       done();
     });
-  },
+  });
 
-  'test hornet request die correctly end the request with 400 error code': function (done) {
+  it('should die correctly ends the request with 400 error code', function (done) {
     var serve = function( request, response ) {
       var hornetRequest = new HornetRequest( request, response );
 
@@ -58,5 +56,5 @@ module.exports = {
       httpServer.close();
       done();
     });
-  }
-}
+  });
+});
