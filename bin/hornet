@@ -8,10 +8,7 @@
 var consts = require ('../lib/consts')
   , utils = require("../lib/utils");
 
-utils.log('Starting Hornet Server v' + consts['HORNET_VERSION'], module);
 
 var hornetServer = require("../lib/server");
 
-hornetServer.start();
-
-utils.log('Hornet Server started, waiting for connections...', module);
+hornetServer.listen();
