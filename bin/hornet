@@ -1,13 +1,14 @@
 #!/usr/bin/env node
+/*!
+ * Hornet
+ * Copyright(c) 2011 Nectify <dev@nectify.com>
+ * Apache 2.0 Licensed
+ */
 
-require ('../lib/hornet_const');
+var consts = require ('../lib/consts')
+  , utils = require("../lib/utils");
 
-var utils = require("../lib/utils");
 
-utils.log('Starting Hornet Server v' + HORNET_VERSION, module);
+var hornetServer = require("../lib/server");
 
-var hornet = require("../lib/hornet_server");
-
-hornet.start();
-
-utils.log('Hornet Server started, waiting for connections...', module);
+hornetServer.listen();
