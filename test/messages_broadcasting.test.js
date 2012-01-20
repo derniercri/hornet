@@ -92,3 +92,105 @@ describe('connected on multiples channel', function() {
 
 
 });
+
+
+describe('Clients', function() {
+
+  describe('connected on one single channel', function() {
+    
+    it( 'should receive a message when one is published on redis', function ( done ) {
+
+      var hub = new ChannelsHub({
+        'log_level' : 1
+      });
+
+      var channel = "test_channel3";
+
+      var lock1 = false
+        , lock2 = false
+
+      var sync = function() {
+        if ( lock1 && lock2 )
+          done();
+      };
+
+      var client = c.createStubClient(function( message ) {
+        message.should.have.property('type','test');
+        lock1 = true;
+
+        sync();
+      }, "otken");
+
+      var client2 = c.createStubClient(function( message ) {
+        message.should.have.property('type','test');
+        lock2 = true;
+
+        sync();
+      }, "otken2");
+
+      hub.subscribe( channel, client );
+      hub.subscribe( channel, client2 );
+
+      setTimeout( function() {
+        redis.publish(consts['HORNET_USER_SPECIFIC_CHANNEL_PREFIX'] + channel, JSON.stringify( { type: "test" } ) )  
+        }, 100);
+    }); 
+
+
+    it( 'should receive a message for one client if except is in message', function ( done ) {
+      var hub = new ChannelsHub({
+        'log_level' : 1
+      });
+
+      var channel = "test_channel4";
+
+      var client = c.createStubClient(function( message ) {
+        done("Error");
+      }, "otken");
+
+      var client2 = c.createStubClient(function( message ) {
+        message.should.have.property('type','test');
+      }, "otken2");
+
+      hub.subscribe( channel, client );
+      hub.subscribe( channel, client2 );
+
+      setTimeout( function() {
+        redis.publish(consts['HORNET_USER_SPECIFIC_CHANNEL_PREFIX'] + channel, JSON.stringify( { type: "test", except: "otken" } ) )  
+        }, 100);
+
+      setTimeout( function() {
+        done();
+        }, 400);
+    });
+
+    it( 'should receive a message for one client if only is in message', function ( done ) {
+      var hub = new ChannelsHub({
+        'log_level' : 1
+      });
+
+      var channel = "test_channel5";
+
+
+      var client = c.createStubClient(function( message ) {
+        message.should.have.property('type','test');
+
+      }, "otken");
+
+      var client2 = c.createStubClient(function( message ) {
+        done("Error");
+      }, "otken2");
+
+      hub.subscribe( channel, client );
+      hub.subscribe( channel, client2 );
+
+      setTimeout( function() {
+        redis.publish(consts['HORNET_USER_SPECIFIC_CHANNEL_PREFIX'] + channel, JSON.stringify( { type: "test", only: "otken" } ) )  
+        }, 100);
+
+      setTimeout( function() {
+        done();
+        }, 400);
+    }); 
+  });
+});

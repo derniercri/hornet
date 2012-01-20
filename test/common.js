@@ -41,7 +41,10 @@ var createStubSocket = function(onMessage) {
   };
 }
 
-var createStubClient = function( onMessage ) {
+var createStubClient = function( onMessage, token ) {
+  if ( ! token )
+    token = "mockToken";
+
   var socket = new function() {
     this.send = function( message ) {
       onMessage( JSON.parse(message) );
@@ -50,7 +53,7 @@ var createStubClient = function( onMessage ) {
     this.on = function() {};
   };
 
-  var client = new HornetClient( "mockToken", socket );
+  var client = new HornetClient( token, socket );
 
   return client;
 }
