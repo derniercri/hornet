@@ -42,7 +42,7 @@ describe('Hornet static routes', function() {
         });  
         
         req.end();    
-      })
+      });
     });
   });
 
