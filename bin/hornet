@@ -6,9 +6,9 @@
  */
 
 var consts = require ('../lib/consts')
-  , utils = require("../lib/utils");
+  , utils = require("../lib/utils")
+  , Hornet = require('../lib/server');
 
+var hornet = new Hornet();
 
-var hornetServer = require("../lib/server");
-
-hornetServer.listen();
+hornet.listen();
