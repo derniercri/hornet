@@ -4,34 +4,35 @@
 
 ## Description
 
-Hornet is a realtime engine that let you enhance your web application by connecting users together. Hornet is a publish/suscribe system extremely easy to use, secure and scalable. Well, Hornet will integrates very well your own existing application, no matter what language or framework you're using.
+Hornet is a realtime engine that let you enhance your web application by connecting users together. 
+Hornet is meant to be used next to your own existing application, no matter what language or framework you're using, by using connectors.
 
 Hornet is powered by NodeJs, Socket.io and is backed by Redis.
 
-### Hornet philosophy: core engine and connectors
+### Hornet philosophy: the engine and the connector
 
-Hornet is intented to act as a hub for your existing web application, offering the possibility to keep a pool of connected users and broadcasting messages to them in realtime. That's where NodeJS is goot at.
+Hornet engine acts as a hub for your existing web application: it keeps a pool of connected users and offers you the possibility to broadcast them messages in realtime.
 
-The connector is a small library that your existing application will use to connect your clients to Hornet and to broadcast message to them. When a client access a page with realtime features on it, your web application will generates a connection token to let the client subscribe to a hornet channel. 
+The connector is a small library that is going to be used by your existing application to connect your clients to Hornet and to broadcast message to them. 
+When a client access a page with realtime features on it, your webapp has to generate a connection token to let the client subscribe to a hornet channel. 
 
-When you want to broadcast a message to a specific channel, you'll also use the hornet connector to publish it. Using Redis publish/subscribe mechanism, Hornet core engines will be notified by this new message and transfer it to subscribed clients.
+When you want to broadcast a message to a specific channel, you'll also use the hornet connector to publish it. 
+Using Redis publish/subscribe mechanism, Hornet core engine will be notified by this new message and forward it to subscribed clients.
 
-Hornet messages should always be JSON valid objects, containing at least the "type" attribute.
+Hornet messages should always be JSON valid objects, containing at least the "type" property.
 
 ### Features
 
 * Realtime publishing to clients from your existing web application
-* Secure subscription to channels, using temporary, non-consecutive 9-chars base 62 numbers.
-* Specified architecture for connectors, and connectors available in multiples languages: Java and Ruby at the moment
+* Secure subscription to channels, using temporary (2 min TTL), non-consecutive 9-chars base 62 numbers.
+* Standardised architecture for connectors. Implementation already existing for Java and Ruby
 * Lots of supported transports and browsers thanks to [Socket.io](http://socket.io/)
-* Multichannel supports, you can now connect to multiple channel
-
+* Multichannel support
 
 ## Requirements
 
 * [Node.js](https://github.com/joyent/node) and [npm](http://npmjs.org/)
 * [Redis](http://redis.io/)
-
 
 ## Installation
 
@@ -39,11 +40,11 @@ Hornet messages should always be JSON valid objects, containing at least the "ty
 
 ## Starting a hornet instance
 
-First, be sure that redis server is already launched
+Launch redis server if not already done:
 
 	redis-server
 
-Then launch hornet:
+Launch hornet:
   
 	hornet
 
@@ -53,9 +54,8 @@ How to scale? Just launch more hornet instances and load balance them though a T
 
 ### Required libs
 
-Include theses two libraries :
+Include this library :
 
-	<script src="http://host:port/socket.io/socket.io.js"></script>
 	<script src="http://host:port/hornet/hornet.js"></script>
 
 Note that Hornet is running on port 8187 by default. If you want to expose Hornet on port 80 on your domain, use a TCP load balancer, like HAProxy
@@ -66,16 +66,12 @@ Note that Hornet is running on port 8187 by default. If you want to expose Horne
 Token should be generated for one or multiple channels using a connector. See the dedicated section below.
 
 	// javascript
-	var hornet = new Hornet({ uri: 'uri', channels: ['channel1', 'channel2'], token: 'token' });
+	var hornet = new Hornet({
+		uri: 'uri', 
+		channels: ['channel1', 'channel2'], 
+		token: 'token' 
+	});
 	hornet.connect();
-
-You can always use the old synthax but it's deprecated now :
-
-	// javascript
-	var hornet = new Hornet(uri, channel, token);
-	hornet.connect();
-
-Note: this synthax doesn't support multichannel.
 
 Example :
 
@@ -83,10 +79,9 @@ Example :
 	var hornet = new Hornet({ uri: 'http://localhost:8187', channels: ['news', 'privateMessages'], token: 'VhjHU89Jhk' });
 	hornet.connect();    
 
-
 ## Messages handling
 
-Each time a new message is coming, an event is raised. Simply handle them like the following:
+Each time a new message is coming, an event is raised. Handle them like the following:
 
 	// javascript
 	hornet.on("channel","message_type", function ( messageData ) {
@@ -112,12 +107,24 @@ Example:
 	Client with token "a3RErg5Z" sends "{ type: "foo", except: "a3RErg5Z", text: "dummy" }"
 	Hornet is notified of the new message, broadcasts it to clients with tokens : "2dlk5ELM" and "EKR39Ehg"
 
+### Sending message to specific clients
+
+If message have the except attribute setted, with a token as value, then the client will not be notified from the message.
+
+Example:
+
+	Client with token "a3RErg5Z" has subscribed to channel "cookie"
+	Client with token "2dlk5ELM" has subscribed to channel "cookie"
+	Client with token "EKR39Ehg" has subscribed to channel "cookie"	
+	Client with token "a3RErg5Z" sends "{ type: "foo", only: "2dlk5ELM", text: "dummy" }"
+	Hornet is notified of the new message, sends it to clients with tokens : "2dlk5ELM"
+
 ## Hornet channel
 This channel is only used for handling intern events like disconnect or error.
 
 ### Handling error 
 
-Hornet can throw some event through the socket, like an invalid token. Use the following to handle that case :
+Hornet can throw some errors events through the socket, like an invalid token. Use the following to handle that case :
 
 	//javascript
 	hornet.on("hornet", "error", function (reply) {
@@ -135,24 +142,24 @@ Hornet can throw some event through the socket, like an invalid token. Use the f
 
 ### Reconnect when loosing the connection
 
-Socket.io has an built-in system for reconnection, but Hornet has it own too. It allow you to ask for a new token to initialize a new connection. You just have to define the "disconnect" event with this :
+Socket.io has an built-in system for reconnection and Hornet has its own too. It allows you to ask for a new token to initialize a new connection. You just have to define the "disconnect" event with this :
 
 	//javascript
 	hornet.on("hornet", disconnect", function ( ) {
 		//Ajax calling to get a new token ?
 	};
 
-After that, the client will try to open a new connection to Hornet with the new token. Note that, it let some time between two attempts and it increase over the time to a maximum of 30 seconds.
+After that, the client will try to open a new connection to Hornet with the new token. Notice that it lets some time between two attempts and this increases over the time to a maximum of 30 seconds.
 
 ## Hornet connectors 
 
-### Specifications
+### Standard
 
-Each connector should expose the following described methods, adapted to implementation language or framework
+Each connector should expose the following described methods, adapted to any language or framework specificities
 
 #### constructor
 
-	initializer of the connector. Should be parametrized with Redis connection settings.
+	initializer of the connector. Should have Redis connection settings as parameters
 
 #### create access token
 
@@ -165,15 +172,15 @@ Each connector should expose the following described methods, adapted to impleme
 
 #### publish
 
-	param string : channel : name of the channel to publish
+	param string list: channels : names of the channels to publish
 	param string : type : type of the message that is going to be published
 	param string : message : JSON object containing all the message data to be broadcasted
-	param string list : options : pair of key/value of options that will be merged with @message.
-	return number : the result of the redis.publish event
+	param string list : options : pair of key/value of options that will be merged with @message. Usually used to specify "only" or "except".
+	return number : the result of the redis publish event
 
 #### redis
 
-	return redis client instance : the redis client instance used by the connector
+	returns redis client instance : the redis client instance used by the connector
 
 #### TTL
 
