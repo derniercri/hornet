@@ -78,10 +78,10 @@ Hornet.prototype = {
   addHandler : function(channel, type, callback) {
     var handlers = this.handlers;
 
-    if ( ! channel in handlers )
+    if ( ! ( channel in handlers ) )
       handlers[channel] = {};
 
-    if ( ! type in handlers[channel] )
+    if ( ! ( type in handlers[channel] ) )
       handlers[channel][type] = [];
     
     handlers[channel][type].push( callback );
@@ -90,7 +90,7 @@ Hornet.prototype = {
   removeHandler : function(channel, type, callback) {
     var handlers = this.handlers;
 
-    if ( ( ! channel in handlers )  || ( ! type in handlers[channel] ) )
+    if ( ( ! ( channel in handlers ) )  || ( ! ( type in handlers[channel] ) ) )
       return; // do nothing...
 
     for ( i in handlers[channel][type] ) {
@@ -138,7 +138,7 @@ Hornet.prototype = {
     socket.on('message', function( rawMessage ) {
       var message = JSON.parse( rawMessage );
 
-      if ( ! message.type && ! message.channel ) {
+      if ( ! ( "type" in message ) && ! ( "channel" in message ) ) {
         log("Wrong message format. Received: " + JSON.stringify(message) );
         return;
       }
@@ -147,7 +147,7 @@ Hornet.prototype = {
       var channel = message.channel;
       var handlers = that.handlers;
 
-      if ( ! channel in handlers || ! type in handlers[channel] )
+      if ( ! ( channel in handlers ) || ! ( type in handlers[channel] ) )
         return;
 
       for ( i in handlers[channel][type] ) {
@@ -161,7 +161,7 @@ Hornet.prototype = {
       var handlers = that.handlers;
       that.connected = false;
       
-      if ( "disconnect" in handlers['hornet'] != undefined )  {
+      if ( handlers['hornet'] != undefined && "disconnect" in handlers['hornet'] )  {
         for ( i in handlers['hornet']['disconnect'] ) {
           var handler = handlers['hornet']['disconnect'][i];
           handler();
@@ -179,6 +179,6 @@ Hornet.prototype = {
 };
 
   
-});
+})();
 
 var $h = Hornet;
