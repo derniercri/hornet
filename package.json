@@ -1,7 +1,7 @@
 {
   "name" : "hornet",
   "description" : "Realtime engine for easy and secured pub/sub in web applications. Backed by Socket.io and redis",
-  "version" : "0.3.9",
+  "version" : "0.3.10",
   "repository" : {
     "type" : "git", 
     "url" : "git@github.com:nectify/hornet.git"

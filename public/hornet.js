@@ -126,55 +126,64 @@ Hornet.prototype = {
   },
 
   connect : function () {
+    var firstTime = true;
+
+    if ( this.socket && this.socket.socket && this.socket.socket.connected ) {
+      this.socket.disconnect();
+      firstTime = false;
+    }
+    
     this.socket = io.connect( this.uri );
     var socket = this.socket;
     var that = this;
 
-    socket.on('connect', function(){
-      that.connected = true;
-      socket.send(JSON.stringify({token: that.token, channels: that.channels}));
-    });
-    
-    socket.on('message', function( rawMessage ) {
-      var message = JSON.parse( rawMessage );
-
-      if ( ! ( "type" in message ) && ! ( "channel" in message ) ) {
-        log("Wrong message format. Received: " + JSON.stringify(message) );
-        return;
-      }
-
-      var type = message.type;
-      var channel = message.channel;
-      var handlers = that.handlers;
-
-      if ( ! ( channel in handlers ) || ! ( type in handlers[channel] ) )
-        return;
-
-      for ( i in handlers[channel][type] ) {
-        var handler = handlers[channel][type][i];
-
-        handler( message );
-      }
-    });
-
-    socket.on('disconnect', function(){
-      var handlers = that.handlers;
-      that.connected = false;
+    if ( firstTime ) { 
+      socket.on('connect', function(){
+        that.connected = true;
+        socket.send(JSON.stringify({token: that.token, channels: that.channels}));
+      });
       
-      if ( handlers['hornet'] != undefined && "disconnect" in handlers['hornet'] )  {
-        for ( i in handlers['hornet']['disconnect'] ) {
-          var handler = handlers['hornet']['disconnect'][i];
-          handler();
+      socket.on('message', function( rawMessage ) {
+        var message = JSON.parse( rawMessage );
+
+        if ( ! ( "type" in message ) && ! ( "channel" in message ) ) {
+          log("Wrong message format. Received: " + JSON.stringify(message) );
+          return;
         }
-      }
-      
-      var reconnect = new delayedTimeout( function( self ) {
-        if( ! that.connected )
-          that.socket.socket.connect();
-        else
-          self.stop();
-      }, 1000, 30000); // will try to reconnect after 1sec and will up to 30sec
-    });
+
+        var type = message.type;
+        var channel = message.channel;
+        var handlers = that.handlers;
+
+        if ( ! ( channel in handlers ) || ! ( type in handlers[channel] ) )
+          return;
+
+        for ( i in handlers[channel][type] ) {
+          var handler = handlers[channel][type][i];
+
+          handler( message );
+        }
+      });
+
+      socket.on('disconnect', function(){
+        var handlers = that.handlers;
+        that.connected = false;
+        
+        if ( handlers['hornet'] != undefined && "disconnect" in handlers['hornet'] )  {
+          for ( i in handlers['hornet']['disconnect'] ) {
+            var handler = handlers['hornet']['disconnect'][i];
+            handler();
+          }
+        }
+        
+        var reconnect = new delayedTimeout( function( self ) {
+          if( ! that.connected )
+            that.socket.socket.connect();
+          else
+            self.stop();
+        }, 1000, 30000); // will try to reconnect after 1sec and will up to 30sec
+      });
+    }
   }
 };
 
