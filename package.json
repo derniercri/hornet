@@ -1,7 +1,7 @@
 {
   "name" : "hornet",
   "description" : "Realtime engine for easy and secured pub/sub in web applications. Backed by Socket.io and redis",
-  "version" : "0.3.10",
+  "version" : "0.3.11",
   "repository" : {
     "type" : "git", 
     "url" : "git@github.com:nectify/hornet.git"
@@ -26,7 +26,7 @@
   "bugs" : { 
     "url" : "http://github.com/nectify/hornet/issues"
   },
-  "os" : [ "linux", "osx" ],
+  "os" : [ "linux", "osx", "darwin" ],
   "directories" : { 
     "bin" : "./bin",
     "lib" : "./lib",
