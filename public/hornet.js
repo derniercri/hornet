@@ -45,7 +45,7 @@ delayedTimeout.prototype = {
 }
 
 
-Hornet = function (uri, channels, token){
+Hornet = function (uri, channels, token, ssl){
   if ( arguments.length == 1 && typeof arguments[0] == 'object' ) {
     var opts = arguments[0];
 
@@ -57,6 +57,7 @@ Hornet = function (uri, channels, token){
     this.uri = opts['uri'];
     this.channels = opts['channels'] ? opts['channels'] : [ opts['channel'] ];
     this.token = opts['token'];
+    this.ssl = opts['ssl'] ? opts['ssl'] : false;
   }
   else { // Deprecated
     log("Using constructor with multiples params instead of json object is deprecated and will be removed in Hornet 0.4" );
@@ -133,7 +134,7 @@ Hornet.prototype = {
       firstTime = false;
     }
     
-    this.socket = io.connect( this.uri );
+    this.socket = io.connect( this.uri, { secure: this.ssl } );
     var socket = this.socket;
     var that = this;
 
