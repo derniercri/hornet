@@ -7,8 +7,12 @@
 
 var consts = require ('../lib/consts')
   , utils = require("../lib/utils")
-  , Hornet = require('../lib/server');
+  , Hornet = require('../lib/server')
+  , settings = {};
 
-var hornet = new Hornet();
+if ( process.argv[2].length )
+  settings = require( process.argv[2] );
+
+var hornet = new Hornet( settings );
 
 hornet.listen();
