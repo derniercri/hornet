@@ -140,7 +140,7 @@ Hornet can throw some errors events through the socket, like an invalid token. U
 	  errorMsg : "Invalid token used, please get a new token" 
 	};
 
-### Reconnect when loosing the connection
+### Reconnect when losing the connection
 
 Socket.io has an built-in system for reconnection and Hornet has its own too. It allows you to ask for a new token to initialize a new connection. You just have to define the "disconnect" event with this :
 
