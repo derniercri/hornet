@@ -41,17 +41,12 @@
   "main": "index",
   "dependencies": {
     "pkginfo": "0.2.x",
-    "redis": "0.6.x",
+    "redis": "^2.8.0",
     "socket.io": "^2.1.1",
     "uglify-js": "1.2.5",
-    "winston": "0.5.9"
+    "winston": "^3.1.0"
   },
-  "devDependencies": {
-    "mocha": "0.10.1",
-    "should": "0.5.1",
-    "socket.io-client": "0.8.7",
-    "assertvanish": "0.0.3-1"
-  },
+  "devDependencies": {},
   "licenses": [{
     "type": "Apache License, Version 2.0",
     "url": "http://www.apache.org/licenses/LICENSE-2.0"
