@@ -192,6 +192,7 @@ Each language who has an existing Redis client library should be able to produce
 
 * Java : https://github.com/nectify/hornet-connector-java
 * Ruby : https://github.com/nectify/hornet-connector-ruby
+* Javascript : https://github.com/Passiverecords/hornet-node-connector
 
 ## License
 
