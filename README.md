@@ -2,7 +2,7 @@
 
 * https://github.com/derniercri/hornet
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/blurp1478963/hornet/tree/takeoffToHerokuAndUpgrade)
 
 ## Description
 
