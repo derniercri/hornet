@@ -45,7 +45,7 @@
   "main": "index",
   "dependencies": {
     "pkginfo": "0.2.x",
-    "redis": "0.6.x",
+    "redis": "2.8.0",
     "socket.io": "^2.1.1",
     "uglify-js": "^3.6.1",
     "winston": "^3.2.1"
