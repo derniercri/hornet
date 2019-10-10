@@ -14,13 +14,19 @@
     },
     {
       "name": "Maxime Brazeilles",
-      "email": "maxime.brazeilles@gmail.com",
-      "url": ""
+      "email": "maxime.brazeilles@gmail.com"
     },
     {
       "name": "Tristan Bourgois",
-      "email": "tristan.bourgois@gmail.com",
-      "url": ""
+      "email": "tristan.bourgois@gmail.com"
+    },
+    {
+      "name": "Aurélien HAVET",
+      "email": "aurelien@derniercri.io"
+    },
+    {
+      "name": "Benjamin Dequevauviller",
+      "email": "ben@passiverecord.com"
     }
   ],
   "bugs": {

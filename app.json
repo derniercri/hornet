@@ -2,7 +2,7 @@
   "name": "Hornet Heroku",
   "description": "A realtime server based on NodeJS and Socker.io",
   "repository": "https://github.com/derniercri/hornet",
-  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "logo": "https://raw.githubusercontent.com/blurp1478963/hornet/takeoffToHerokuAndUpgrade/hornet.png",
   "keywords": ["hornet", "realtime", "socket.io"],
   "addons": [
     "heroku-redis"
