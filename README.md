@@ -1,6 +1,8 @@
 # Hornet
 
-* https://github.com/nectify/hornet
+* https://github.com/derniercri/hornet
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Description
 
@@ -13,10 +15,10 @@ Hornet is powered by NodeJs, Socket.io and is backed by Redis.
 
 Hornet engine acts as a hub for your existing web application: it keeps a pool of connected users and offers you the possibility to broadcast them messages in realtime.
 
-The connector is a small library that is going to be used by your existing application to connect your clients to Hornet and to broadcast message to them. 
-When a client access a page with realtime features on it, your webapp has to generate a connection token to let the client subscribe to a hornet channel. 
+The connector is a small library that is going to be used by your existing application to connect your clients to Hornet and to broadcast message to them.
+When a client access a page with realtime features on it, your webapp has to generate a connection token to let the client subscribe to a hornet channel.
 
-When you want to broadcast a message to a specific channel, you'll also use the hornet connector to publish it. 
+When you want to broadcast a message to a specific channel, you'll also use the hornet connector to publish it.
 Using Redis publish/subscribe mechanism, Hornet core engine will be notified by this new message and forward it to subscribed clients.
 
 Hornet messages should always be JSON valid objects, containing at least the "type" property.
@@ -45,12 +47,12 @@ Launch redis server if not already done:
 	redis-server
 
 Launch hornet:
-  
+
 	hornet
 
 How to scale? Just launch more hornet instances and load balance them though a TCP load balancer.
 
-## Client side JavaScript API    
+## Client side JavaScript API
 
 ### Required libs
 
@@ -67,9 +69,9 @@ Token should be generated for one or multiple channels using a connector. See th
 
 	// javascript
 	var hornet = new Hornet({
-		uri: 'uri', 
-		channels: ['channel1', 'channel2'], 
-		token: 'token' 
+		uri: 'uri',
+		channels: ['channel1', 'channel2'],
+		token: 'token'
 	});
 	hornet.connect();
 
@@ -77,7 +79,7 @@ Example :
 
 	// javascript
 	var hornet = new Hornet({ uri: 'http://localhost:8187', channels: ['news', 'privateMessages'], token: 'VhjHU89Jhk' });
-	hornet.connect();    
+	hornet.connect();
 
 ## Messages handling
 
@@ -103,7 +105,7 @@ Example:
 
 	Client with token "a3RErg5Z" has subscribed to channel "cookie"
 	Client with token "2dlk5ELM" has subscribed to channel "cookie"
-	Client with token "EKR39Ehg" has subscribed to channel "cookie"	
+	Client with token "EKR39Ehg" has subscribed to channel "cookie"
 	Client with token "a3RErg5Z" sends "{ type: "foo", except: "a3RErg5Z", text: "dummy" }"
 	Hornet is notified of the new message, broadcasts it to clients with tokens : "2dlk5ELM" and "EKR39Ehg"
 
@@ -115,14 +117,14 @@ Example:
 
 	Client with token "a3RErg5Z" has subscribed to channel "cookie"
 	Client with token "2dlk5ELM" has subscribed to channel "cookie"
-	Client with token "EKR39Ehg" has subscribed to channel "cookie"	
+	Client with token "EKR39Ehg" has subscribed to channel "cookie"
 	Client with token "a3RErg5Z" sends "{ type: "foo", only: "2dlk5ELM", text: "dummy" }"
 	Hornet is notified of the new message, sends it to clients with tokens : "2dlk5ELM"
 
 ## Hornet channel
 This channel is only used for handling intern events like disconnect or error.
 
-### Handling error 
+### Handling error
 
 Hornet can throw some errors events through the socket, like an invalid token. Use the following to handle that case :
 
@@ -133,11 +135,11 @@ Hornet can throw some errors events through the socket, like an invalid token. U
 
 	//javascript
 	//Exemple of a reply :
-	{ 
+	{
 	  type: "error",
 	  channel: "hornet",
-	  error: "INVALID_TOKEN", 
-	  errorMsg : "Invalid token used, please get a new token" 
+	  error: "INVALID_TOKEN",
+	  errorMsg : "Invalid token used, please get a new token"
 	};
 
 ### Reconnect when losing the connection
@@ -151,7 +153,7 @@ Socket.io has an built-in system for reconnection and Hornet has its own too. It
 
 After that, the client will try to open a new connection to Hornet with the new token. Notice that it lets some time between two attempts and this increases over the time to a maximum of 30 seconds.
 
-## Hornet connectors 
+## Hornet connectors
 
 ### Standard
 
@@ -184,7 +186,7 @@ Each connector should expose the following described methods, adapted to any lan
 
 #### TTL
 
-	property : the value of time to live for access token. Should be 120 seconds as default ( 2 minuts ) 
+	property : the value of time to live for access token. Should be 120 seconds as default ( 2 minuts )
 
 ### List of existing connectors
 
