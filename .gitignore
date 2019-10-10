@@ -11,3 +11,4 @@ npm-debug.log
 *.orig
 dump.rdb
 node_modules/
+.env
