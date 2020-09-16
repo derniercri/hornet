@@ -4,7 +4,7 @@
 
 ## Description
 
-Hornet is a realtime engine originally built for [Fresc](http://fre.sc) that let you enhance your web application by connecting users together.
+Hornet is a realtime engine originally built for [Fresc](https://storage101.lon3.clouddrive.com/v1/MossoCloudFS_b90280c2-efc8-4e1c-9431-dd4f725dbe9d/files.fre.sc/FRESC_h264.mp4) that let you enhance your web application by connecting users together.
 Hornet is meant to be used next to your own existing application, no matter what language or framework you're using, by using connectors.
 
 Hornet is powered by NodeJs, Socket.io and is backed by Redis.
